@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لیست نمایندگان مجلس (پویا از گوگل شیت)</title>
+    
+    <style>
+        body { font-family: Tahoma, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; }
+        h1 { text-align: center; color: #004a80; padding: 20px 0; border-bottom: 3px solid #004a80; }
+        .members-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .member-card {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .member-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+        }
+        .member-image {
+            width: 100%;
+            max-height: 250px;
+            object-fit: contain; 
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        .member-info h4 { 
+            margin: 5px 0; 
+            color: #d9534f;
+            font-size: 1.3em;
+        }
+        .member-info p { 
+            margin: 3px 0; 
+            font-size: 1em; 
+            color: #555; 
+        }
+        .loading {
+            text-align: center;
+            grid-column: 1 / -1;
+            padding: 50px;
+            font-size: 1.2em;
+            color: #777;
+        }
+        .error {
+            text-align: center;
+            grid-column: 1 / -1;
+            padding: 50px;
+            font-size: 1.2em;
+            color: #f0ad4e;
+        }
+    </style>
+</head>
+<body>
+    <h1>لیست نمایندگان مجلس (۲۸۷ نفر)</h1>
+    
+    <div id="members-container" class="members-grid">
+        <div class="loading">در حال بارگذاری داده‌ها از گوگل شیت...</div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
