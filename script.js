@@ -1,5 +1,5 @@
 // =========================================================================
-// ۱. آدرس ثابت پروژه
+// ۱. آدرس ثابت پروژه (فقط CSV)
 // =========================================================================
 
 // آدرس CSV نهایی گوگل شیت
@@ -11,7 +11,7 @@ const SHEET_DATA_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR71KesL
 
 function createMemberCard(member) {
     
-    // !!! کلیدی‌ترین خط: نام ستون شما "لینک تصویر" است
+    // !!! استفاده از سرستون "لینک تصویر" طبق درخواست شما !!!
     const fullImageAddress = member['لینک تصویر'] || ''; 
     
     // اگر آدرس کامل موجود بود، از آن استفاده می‌کنیم.
@@ -48,7 +48,6 @@ function csvToJson(csv) {
     const lines = csv.split('\n').filter(line => line.trim() !== '');
     if (lines.length <= 1) return [];
     
-    // خواندن سرستون ها
     const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
     const result = [];
 
