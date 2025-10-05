@@ -3,14 +3,15 @@
 // =========================================================================
 
 // !!! این آدرس را با آدرس نهایی Publish to web شیت خود جایگزین کنید !!!
-const SHEET_DATA_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR71KesL1HDhke0Y-CKlideg_HzLQe8_pY4ySxqGv6mHdo7uzQJvGAum7X0Y_EPDfsooa5U4aG6hD1K/pub?gid=0&single=true&output=csv'; 
+const SHEET_DATA_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR71KesL1HDhke0Y-CKlideg_HzLQe8_pY4ySxqGv6mHdo7uzQJvGAum7X0Y_EPDfsooa5U4aG6hD1K/pub?output=csv'; 
 
 // =========================================================================
-// ۲. تابع ساخت کارت و رندر (ساده شده برای نمایش در صفحه اصلی)
+// ۲. تابع ساخت کارت و رندر 
 // =========================================================================
 
 function createMemberCard(member) {
-    const fullImageAddress = member['لینک تصویر'] || ''; 
+    // آدرس تصویر از سرستون "تصویر" خوانده می‌شود
+    const fullImageAddress = member['تصویر'] || ''; 
     const name = member['نام نماینده'] || 'نام نامشخص';
     
     const imageURL = fullImageAddress ? fullImageAddress : 'https://via.placeholder.com/100x100.png?text=No+Photo'; 
@@ -41,17 +42,24 @@ function openMemberModal(encodedData) {
     // دیکد کردن اطلاعات نماینده
     const member = JSON.parse(decodeURIComponent(escape(atob(encodedData))));
 
+    // خواندن داده‌ها از سرستون‌های جدید
     const name = member['نام نماینده'] || 'نام نامشخص';
     const constituency = member['حوزه انتخابیه'] || 'حوزه نامشخص';
     const commission = member['کمیسیون'] || 'کمیسیون نامشخص';
-    const province = member['استان'] || member['Province'] || 'نامشخص'; // استفاده از ستون "استان"
-    const imageURL = member['لینک تصویر'] || 'https://via.placeholder.com/140x140.png?text=No+Photo'; 
+    const province = member['استان'] || 'نامشخص'; // ستون "استان"
+    const imageURL = member['تصویر'] || 'https://via.placeholder.com/126x126.png?text=No+Photo'; 
+    
+    // خواندن لینک‌ها از سرستون‌های مربوطه
+    const linkProfile = member['پروفایل نماینده'] || '#';
+    const linkStatements = member['مواضع و مصاحبه‌ها'] || '#';
+    const linkSessions = member['جلسات و دیدارها'] || '#'; // نام ستون جدید
+    const linkFoundationActivities = member['عملکرد بنیاد در حوزه انتخابیه'] || '#';
+    const linkAnalysis = member['تحلیل و ارزیابی'] || '#'; // نام ستون جدید
     
     // پر کردن اطلاعات مدال
     document.getElementById('modal-name').innerText = name;
     document.getElementById('modal-image').src = imageURL;
 
-    // پر کردن جزئیات با تیترهای رنگی (با استفاده از CSS)
     const detailsHTML = `
         <p><strong>نام و نام خانوادگی:</strong> <span>${name}</span></p>
         <p><strong>استان:</strong> <span>${province}</span></p>
@@ -60,15 +68,13 @@ function openMemberModal(encodedData) {
     `;
     document.getElementById('modal-details').innerHTML = detailsHTML;
     
-    // ساخت دکمه‌ها (آدرس‌ها نمایشی هستند و باید با آدرس‌های واقعی جایگزین شوند)
-    const encodedName = encodeURIComponent(name); // کدگذاری نام برای استفاده در URL
-
+    // ساخت دکمه‌ها با لینک‌ها و نام‌های جدید
     const buttonsHTML = `
-        <a href="https://yourdomain.com/profile/${encodedName}" target="_blank" class="btn-profile"><i class="fas fa-user-circle"></i> پروفایل نماینده</a>
-        <a href="https://yourdomain.com/statements/${encodedName}" target="_blank"><i class="fas fa-microphone-alt"></i> مواضع و مصاحبه‌ها</a>
-        <a href="https://yourdomain.com/sessions/${encodedName}" target="_blank"><i class="fas fa-gavel"></i> جلسات و تصمیمات</a>
-        <a href="https://yourdomain.com/activities/${encodedName}" target="_blank"><i class="fas fa-city"></i> عملکرد بنیاد در حوزه انتخابیه</a>
-        <a href="https://yourdomain.com/analysis/${encodedName}" target="_blank"><i class="fas fa-chart-line"></i> تحلیل تعاملات</a>
+        <a href="${linkProfile}" target="_blank" class="btn-profile"><i class="fas fa-user-circle"></i> پروفایل نماینده</a>
+        <a href="${linkStatements}" target="_blank"><i class="fas fa-microphone-alt"></i> مواضع و مصاحبه‌ها</a>
+        <a href="${linkSessions}" target="_blank"><i class="fas fa-gavel"></i> جلسات و دیدارها</a>
+        <a href="${linkFoundationActivities}" target="_blank"><i class="fas fa-city"></i> عملکرد بنیاد در حوزه انتخابیه</a>
+        <a href="${linkAnalysis}" target="_blank"><i class="fas fa-chart-line"></i> تحلیل و ارزیابی</a>
     `;
     document.getElementById('modal-buttons').innerHTML = buttonsHTML;
 
