@@ -13,9 +13,8 @@ function createMemberCard(member) {
     const fullImageAddress = member['لینک تصویر'] || ''; 
     const name = member['نام نماینده'] || 'نام نامشخص';
     
-    const imageURL = fullImageAddress ? fullImageAddress : 'https://via.placeholder.com/120x120.png?text=No+Photo'; 
+    const imageURL = fullImageAddress ? fullImageAddress : 'https://via.placeholder.com/100x100.png?text=No+Photo'; 
 
-    // کد نماینده را به صورت رمزنگاری شده (Base64) برای باز کردن مدال ارسال می‌کنیم
     const encodedData = btoa(unescape(encodeURIComponent(JSON.stringify(member))));
 
     return `
@@ -25,7 +24,7 @@ function createMemberCard(member) {
                 src="${imageURL}" 
                 alt="تصویر ${name}" 
                 loading="lazy" 
-                onerror="this.onerror=null;this.src='https://via.placeholder.com/120x120.png?text=Broken';"
+                onerror="this.onerror=null;this.src='https://via.placeholder.com/100x100.png?text=Broken';"
             >
             <h4>${name}</h4>
         </div>
@@ -45,29 +44,31 @@ function openMemberModal(encodedData) {
     const name = member['نام نماینده'] || 'نام نامشخص';
     const constituency = member['حوزه انتخابیه'] || 'حوزه نامشخص';
     const commission = member['کمیسیون'] || 'کمیسیون نامشخص';
-    const imageURL = member['لینک تصویر'] || 'https://via.placeholder.com/150x150.png?text=No+Photo'; 
+    const province = member['استان'] || member['Province'] || 'نامشخص'; // استفاده از ستون "استان"
+    const imageURL = member['لینک تصویر'] || 'https://via.placeholder.com/140x140.png?text=No+Photo'; 
     
     // پر کردن اطلاعات مدال
     document.getElementById('modal-name').innerText = name;
     document.getElementById('modal-image').src = imageURL;
 
+    // پر کردن جزئیات با تیترهای رنگی (با استفاده از CSS)
     const detailsHTML = `
-        <p><strong>نام و نام خانوادگی:</strong> ${name}</p>
-        <p><strong>حوزه انتخابیه:</strong> ${constituency}</p>
-        <p><strong>کمیسیون:</strong> ${commission}</p>
-        <p><strong>شناسه عضو:</strong> ${member['FileID'] || 'نامشخص'}</p>
+        <p><strong>نام و نام خانوادگی:</strong> <span>${name}</span></p>
+        <p><strong>استان:</strong> <span>${province}</span></p>
+        <p><strong>حوزه انتخابیه:</strong> <span>${constituency}</span></p>
+        <p><strong>کمیسیون:</strong> <span>${commission}</span></p>
     `;
     document.getElementById('modal-details').innerHTML = detailsHTML;
     
-    // ساخت دکمه‌ها
-    const baseLink = `https://yourdomain.com/profile/${member['نام نماینده']}`; // لینک پایه را بر اساس دامنه خود تنظیم کنید
-    
+    // ساخت دکمه‌ها (آدرس‌ها نمایشی هستند و باید با آدرس‌های واقعی جایگزین شوند)
+    const encodedName = encodeURIComponent(name); // کدگذاری نام برای استفاده در URL
+
     const buttonsHTML = `
-        <a href="${baseLink}/profile" target="_blank" class="btn-profile"><i class="fas fa-user-circle"></i> پروفایل نماینده</a>
-        <a href="${baseLink}/statements" target="_blank"><i class="fas fa-microphone"></i> مواضع و مصاحبه‌ها</a>
-        <a href="${baseLink}/sessions" target="_blank"><i class="fas fa-gavel"></i> جلسات و تصمیمات</a>
-        <a href="${baseLink}/foundation-activities" target="_blank"><i class="fas fa-building"></i> عملکرد بنیاد در حوزه انتخابیه</a>
-        <a href="${baseLink}/analysis" target="_blank"><i class="fas fa-chart-line"></i> تحلیل تعاملات</a>
+        <a href="https://yourdomain.com/profile/${encodedName}" target="_blank" class="btn-profile"><i class="fas fa-user-circle"></i> پروفایل نماینده</a>
+        <a href="https://yourdomain.com/statements/${encodedName}" target="_blank"><i class="fas fa-microphone-alt"></i> مواضع و مصاحبه‌ها</a>
+        <a href="https://yourdomain.com/sessions/${encodedName}" target="_blank"><i class="fas fa-gavel"></i> جلسات و تصمیمات</a>
+        <a href="https://yourdomain.com/activities/${encodedName}" target="_blank"><i class="fas fa-city"></i> عملکرد بنیاد در حوزه انتخابیه</a>
+        <a href="https://yourdomain.com/analysis/${encodedName}" target="_blank"><i class="fas fa-chart-line"></i> تحلیل تعاملات</a>
     `;
     document.getElementById('modal-buttons').innerHTML = buttonsHTML;
 
@@ -76,7 +77,6 @@ function openMemberModal(encodedData) {
 
 function closeModal(event) {
     const modal = document.getElementById('memberModal');
-    // اگر کلیک مستقیماً روی دکمه X یا پس زمینه (overlay) بود، مدال را ببند
     if (event.target === modal || event.target.className === 'close-button') {
         modal.style.display = 'none';
     }
