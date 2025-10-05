@@ -47,19 +47,20 @@ function openMemberModal(encodedData) {
     const constituency = member['حوزه انتخابیه'] || 'حوزه نامشخص';
     const commission = member['کمیسیون'] || 'کمیسیون نامشخص';
     const province = member['استان'] || 'نامشخص'; // ستون "استان"
-    const imageURL = member['تصویر'] || 'https://via.placeholder.com/126x126.png?text=No+Photo'; 
+    const imageURL = member['تصویر'] || 'https://via.placeholder.com/126x126.png?text=No+Photo'; // اندازه placeholder مطابق CSS جدید
     
-    // خواندن لینک‌ها از سرستون‌های مربوطه
+    // خواندن لینک‌ها و نام‌های جدید ستون‌ها
     const linkProfile = member['پروفایل نماینده'] || '#';
     const linkStatements = member['مواضع و مصاحبه‌ها'] || '#';
-    const linkSessions = member['جلسات و دیدارها'] || '#'; // نام ستون جدید
+    const linkSessions = member['جلسات و دیدارها'] || '#'; // نام ستون جدید: جلسات و دیدارها
     const linkFoundationActivities = member['عملکرد بنیاد در حوزه انتخابیه'] || '#';
-    const linkAnalysis = member['تحلیل و ارزیابی'] || '#'; // نام ستون جدید
+    const linkAnalysis = member['تحلیل و ارزیابی'] || '#'; // نام ستون جدید: تحلیل و ارزیابی
     
     // پر کردن اطلاعات مدال
     document.getElementById('modal-name').innerText = name;
     document.getElementById('modal-image').src = imageURL;
 
+    // نمایش "استان" به جای "شناسه عضو" با رنگ تیتر مجزا
     const detailsHTML = `
         <p><strong>نام و نام خانوادگی:</strong> <span>${name}</span></p>
         <p><strong>استان:</strong> <span>${province}</span></p>
