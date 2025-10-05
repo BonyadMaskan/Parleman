@@ -27,13 +27,14 @@
             margin-bottom: 20px;
         }
 
-        /* ساختار نمایش کارت ها - افزایش تراکم */
+        /* ساختار نمایش کارت ها - تراکم بالا در دسکتاپ */
         .members-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* کوچکتر شدن برای تراکم بیشتر */
-            gap: 20px;
+            /* در دسکتاپ: کوچک‌تر شدن کارت‌ها برای نمایش بیشتر */
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); 
+            gap: 15px; /* کاهش فاصله بین کارت‌ها */
             padding: 20px;
-            max-width: 1300px;
+            max-width: 1400px;
             margin: 0 auto;
         }
 
@@ -42,27 +43,28 @@
             background: #fff;
             border: 1px solid #e0e0e0;
             border-radius: 12px;
-            padding: 15px 10px; /* کاهش پدینگ برای جمع‌وجور شدن */
+            padding: 10px 5px; /* کاهش شدید پدینگ */
             text-align: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.05);
             transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
-            cursor: pointer; /* نشانگر کلیک */
+            cursor: pointer;
         }
         .member-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
-            background-color: #f0f8ff; /* افکت هاور */
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            background-color: #f0f8ff;
         }
 
-        /* اصلاح تصویر: دایره‌ای با تنظیم موقعیت */
+        /* اصلاح تصویر: دایره‌ای با تنظیم موقعیت و اندازه کوچک‌تر */
         .member-image {
-            width: 120px; /* اندازه کوچک شده */
-            height: 120px; 
+            width: 100px; /* کوچک‌تر در دسکتاپ */
+            height: 100px; 
             object-fit: cover; 
-            object-position: 0 10%; /* تنظیم فوکوس به سمت بالا برای جلوگیری از برش صورت */
+            /* تنظیم فوکوس به سمت بالا (5%) برای جلوگیری از برش صورت */
+            object-position: 0 5%; 
             border-radius: 50%; 
             border: 3px solid #1a4e7c; 
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             display: block;
             margin-left: auto;
             margin-right: auto;
@@ -70,10 +72,22 @@
 
         /* نام نماینده در کارت اصلی */
         .member-card h4 {
-            margin: 5px 0 0 0;
+            margin: 0;
             color: #000;
-            font-size: 1.0em; /* فونت کوچکتر */
-            font-weight: 600;
+            font-size: 0.9em; /* فونت کوچکتر */
+            font-weight: 500;
+        }
+
+        /* Media Query برای موبایل: ۲ کارت در ردیف و عکس کمی بزرگتر */
+        @media (max-width: 600px) {
+            .members-grid {
+                grid-template-columns: repeat(2, 1fr); /* فقط دو کارت در هر ردیف */
+                gap: 10px;
+            }
+            .member-image {
+                width: 100px;
+                height: 100px;
+            }
         }
 
         /* ------------------ Modal Styles ------------------ */
@@ -92,22 +106,24 @@
 
         .modal-content {
             background-color: #fefefe;
-            margin: 5% auto; /* کمی بالاتر قرار گرفتن */
+            margin: 4% auto; 
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             width: 90%; 
-            max-width: 700px; /* اندازه مدال */
+            max-width: 600px; 
             position: relative;
             animation-name: animatetop;
             animation-duration: 0.4s
         }
         
+        /* Media Query برای فیت شدن عرض مدال در موبایل */
         @media (max-width: 768px) {
             .modal-content {
                 margin: 10% auto;
-                width: 95%;
-                padding: 20px;
+                width: 90%; /* کمی کوچک‌تر از ۱۰۰٪ برای حاشیه در موبایل */
+                max-width: 90%;
+                padding: 15px;
             }
         }
         
@@ -126,8 +142,7 @@
             left: 15px;
         }
 
-        .close-button:hover,
-        .close-button:focus {
+        .close-button:hover, .close-button:focus {
             color: #000;
             text-decoration: none;
             cursor: pointer;
@@ -141,43 +156,51 @@
         }
 
         .modal-header h2 {
-            font-size: 1.5em;
+            font-size: 1.4em;
             color: #1a4e7c;
             margin: 0;
         }
         
         .modal-body-details {
             display: flex;
-            align-items: center;
-            gap: 25px;
+            align-items: flex-start; /* ترازبندی از بالا */
+            gap: 20px;
             margin-bottom: 30px;
         }
         
         .modal-detail-img {
-            width: 150px;
-            height: 150px;
+            width: 140px; /* کوچکتر شدن عکس پاپ‌آپ (۵٪ کمتر از ۱۵۰px قبلی) */
+            height: 140px;
             object-fit: cover;
-            object-position: 0 10%;
+            object-position: 0 5%;
             border-radius: 50%;
-            border: 5px solid #d9534f;
+            border: 4px solid #d9534f;
             flex-shrink: 0;
         }
         
         .modal-detail-text p {
-            font-size: 1em;
+            font-size: 0.95em;
             margin: 8px 0;
             line-height: 1.6;
+            color: #555; /* رنگ متن جواب */
         }
 
+        /* رنگ و استایل تیترها (حوزه انتخابیه، کمیسیون، استان) */
         .modal-detail-text strong {
-            color: #333;
+            color: #1a4e7c; /* رنگ آبی تیره برای تیترها */
             font-weight: 700;
             margin-left: 8px;
         }
         
+        /* آیکون‌ها و فاصله */
+        .modal-buttons a i {
+            font-size: 1.1em; /* بزرگتر شدن آیکون */
+            margin-left: 8px; /* افزایش فاصله با متن */
+        }
+        
         .modal-buttons {
             display: flex;
-            flex-wrap: wrap; /* برای نمایش در موبایل */
+            flex-wrap: wrap; 
             gap: 10px;
             justify-content: center;
             padding-top: 20px;
@@ -185,8 +208,8 @@
         }
 
         .modal-buttons a {
-            flex-grow: 1; /* رشد برای پر کردن فضا */
-            max-width: 220px;
+            flex-grow: 1; 
+            max-width: 200px; 
             padding: 10px 15px;
             text-decoration: none;
             color: #fff;
@@ -200,7 +223,7 @@
         
         .modal-buttons a:hover {
             background-color: #0e304d;
-            transform: scale(1.05);
+            transform: scale(1.03);
         }
         
         .modal-buttons .btn-profile { background-color: #d9534f; }
