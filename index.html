@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سامانه مانیتورینگ فعالیت‌های پارلمانی بنیاد مسکن</title>
+    
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        /* تنظیمات عمومی و فونت */
+        body { 
+            font-family: 'Vazirmatn', sans-serif; 
+            background-color: #f7f7f7; 
+            margin: 0; 
+            padding: 0; 
+        }
+        
+        /* عنوان اصلی بالای صفحه */
+        h1 { 
+            text-align: center; 
+            color: #1a4e7c; 
+            padding: 25px 0; 
+            border-bottom: 4px solid #1a4e7c; 
+            font-size: 1.8em; 
+            margin-bottom: 20px;
+        }
+
+        /* ساختار نمایش کارت ها - افزایش تراکم */
+        .members-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* کوچکتر شدن برای تراکم بیشتر */
+            gap: 20px;
+            padding: 20px;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        /* ظاهر هر کارت اصلی */
+        .member-card {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 15px 10px; /* کاهش پدینگ برای جمع‌وجور شدن */
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+            transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
+            cursor: pointer; /* نشانگر کلیک */
+        }
+        .member-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+            background-color: #f0f8ff; /* افکت هاور */
+        }
+
+        /* اصلاح تصویر: دایره‌ای با تنظیم موقعیت */
+        .member-image {
+            width: 120px; /* اندازه کوچک شده */
+            height: 120px; 
+            object-fit: cover; 
+            object-position: 0 10%; /* تنظیم فوکوس به سمت بالا برای جلوگیری از برش صورت */
+            border-radius: 50%; 
+            border: 3px solid #1a4e7c; 
+            margin-bottom: 10px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* نام نماینده در کارت اصلی */
+        .member-card h4 {
+            margin: 5px 0 0 0;
+            color: #000;
+            font-size: 1.0em; /* فونت کوچکتر */
+            font-weight: 600;
+        }
+
+        /* ------------------ Modal Styles ------------------ */
+
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 1000; 
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.6);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto; /* کمی بالاتر قرار گرفتن */
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            width: 90%; 
+            max-width: 700px; /* اندازه مدال */
+            position: relative;
+            animation-name: animatetop;
+            animation-duration: 0.4s
+        }
+        
+        @media (max-width: 768px) {
+            .modal-content {
+                margin: 10% auto;
+                width: 95%;
+                padding: 20px;
+            }
+        }
+        
+        @keyframes animatetop {
+            from {top: -300px; opacity: 0}
+            to {top: 0; opacity: 1}
+        }
+
+        .close-button {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            left: 15px;
+        }
+
+        .close-button:hover,
+        .close-button:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .modal-header {
+            text-align: center;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            font-size: 1.5em;
+            color: #1a4e7c;
+            margin: 0;
+        }
+        
+        .modal-body-details {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .modal-detail-img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            object-position: 0 10%;
+            border-radius: 50%;
+            border: 5px solid #d9534f;
+            flex-shrink: 0;
+        }
+        
+        .modal-detail-text p {
+            font-size: 1em;
+            margin: 8px 0;
+            line-height: 1.6;
+        }
+
+        .modal-detail-text strong {
+            color: #333;
+            font-weight: 700;
+            margin-left: 8px;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            flex-wrap: wrap; /* برای نمایش در موبایل */
+            gap: 10px;
+            justify-content: center;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .modal-buttons a {
+            flex-grow: 1; /* رشد برای پر کردن فضا */
+            max-width: 220px;
+            padding: 10px 15px;
+            text-decoration: none;
+            color: #fff;
+            background-color: #1a4e7c;
+            border-radius: 6px;
+            font-size: 0.9em;
+            font-weight: 500;
+            text-align: center;
+            transition: background-color 0.2s, transform 0.2s;
+        }
+        
+        .modal-buttons a:hover {
+            background-color: #0e304d;
+            transform: scale(1.05);
+        }
+        
+        .modal-buttons .btn-profile { background-color: #d9534f; }
+        .modal-buttons .btn-profile:hover { background-color: #b94440; }
+        
+    </style>
+</head>
+<body>
+    <h1>سامانه مانیتورینگ فعالیت‌های پارلمانی بنیاد مسکن</h1>
+    
+    <div id="members-container" class="members-grid">
+        <div class="loading">در حال بارگذاری داده‌ها از گوگل شیت...</div>
+    </div>
+
+    <div id="memberModal" class="modal" onclick="closeModal(event)">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal(event)">&times;</span>
+            <div class="modal-header">
+                <h2 id="modal-name"></h2>
+            </div>
+            <div class="modal-body">
+                <div class="modal-body-details">
+                    <img id="modal-image" class="modal-detail-img" src="" alt="تصویر نماینده">
+                    <div id="modal-details" class="modal-detail-text">
+                        </div>
+                </div>
+                <div id="modal-buttons" class="modal-buttons">
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
